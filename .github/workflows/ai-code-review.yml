@@ -29,3 +29,5 @@ jobs:
         run: python ./.github/scripts/get_changed_files.py "$GITHUB_REPOSITORY" "$PR_NUMBER" "$GITHUB_SHA"
         env:
           GITHUB_API_KEY: ${{ secrets.GH_API_KEY }}
+          OPENAI_ORG: ${{ secrets.OPENAI_ORG }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
