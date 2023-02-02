@@ -1,0 +1,12 @@
+name: ai-code-review
+run-name: ${{ github.actor }} is using AI to do code review for their code
+on: [pull-request]
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.17.0'
+      - run: go run hello.go
