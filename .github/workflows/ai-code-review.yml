@@ -4,6 +4,7 @@ on: [pull_request]
 
 env:
   PR_NUMBER: ${{ github.event.number }}
+  COMMIT_ID: ${{ github.event.pull_request.head.sha }}
 
 jobs:
   build-go-code:
@@ -14,7 +15,6 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: '>=1.17.0'
-      - run: go run hello.go
 
       - uses: actions/setup-python@v4
         with:
@@ -26,7 +26,7 @@ jobs:
           path: "./.github/scripts/requirements.txt"
 
       - name: "Get AI Code Review"
-        run: python ./.github/scripts/get_changed_files.py "$GITHUB_REPOSITORY" "$PR_NUMBER" "$GITHUB_SHA"
+        run: python ./.github/scripts/get_changed_files.py "$GITHUB_REPOSITORY" "$PR_NUMBER" "$COMMIT_ID"
         env:
           GITHUB_API_KEY: ${{ secrets.GH_API_KEY }}
           OPENAI_ORG: ${{ secrets.OPENAI_ORG }}
