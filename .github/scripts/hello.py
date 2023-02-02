@@ -19,6 +19,7 @@ def get_changed_files_in_pr(repo_name, pr_number, github_api_key):
     )
 
     res = response.json()
+    print(res)
     for r in res:
         print(r["filename"])
 
