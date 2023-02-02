@@ -10,3 +10,16 @@ jobs:
         with:
           go-version: '>=1.17.0'
       - run: go run hello.go
+
+      - name: Get changed js files excluding the docs folder
+        id: changed-go-files
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            **/*.go
+      
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
