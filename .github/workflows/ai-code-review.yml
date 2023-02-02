@@ -20,6 +20,11 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "./.github/scripts/requirements.txt"
+
       - name: "Run Code Review script"
         run: python ./.github/scripts/hello.py "$GITHUB_REPOSITORY" "$PR_NUMBER"
         env:
