@@ -23,5 +23,6 @@ jobs:
       - name: "Run Code Review script"
         run: python ./.github/scripts/hello.py
         env:
-          PATH_TO_PR: "$GITHUB_REPOSITORY/pulls/$PR_NUMBER"
+          GIT_REPO: $GITHUB_REPOSITORY
+          PR_NUMBER: $PR_NUMBER 
           GITHUB_API_KEY: ${{ secrets.GH_API_KEY }}

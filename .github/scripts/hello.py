@@ -1,5 +1,6 @@
 import os
 
-path_to_pr = os.getenv("PATH_TO_PR")
+repo_name = os.getenv("GIT_REPO")
+pr_number = os.getenv("PR_NUMBER")
 
-print("Path to PR is %s" % path_to_pr)
+print("Path to PR is %s/pulls/%s" % (repo_name, pr_number))
