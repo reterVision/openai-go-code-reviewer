@@ -1,6 +1,8 @@
 import sys
 import os
 
+import requests
+
 
 def get_changed_files_in_pr(repo_name, pr_number, github_api_key):
     print("Loading files included in PR %s" % pr_number)
