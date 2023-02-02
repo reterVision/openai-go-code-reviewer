@@ -1,6 +1,10 @@
 name: ai-code-review
 run-name: ${{ github.actor }} is using AI to do code review for their code
 on: [pull_request]
+
+env:
+  PR_NUMBER: ${{ github.event.number }}
+
 jobs:
   build-go-code:
     runs-on: ubuntu-latest
@@ -11,15 +15,5 @@ jobs:
           go-version: '>=1.17.0'
       - run: go run hello.go
 
-      - name: Get changed js files excluding the docs folder
-        id: changed-go-files
-        uses: tj-actions/changed-files@v35
-        with:
-          files: |
-            **/*.go
-      
-      - name: List all changed files
-        run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
+      - name: "Get repo name and pr number"
+        run: echo "$GITHUB_REPOSITORY/pulls/$PR_NUMBER"
