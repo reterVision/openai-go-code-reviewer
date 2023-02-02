@@ -25,7 +25,7 @@ jobs:
         with:
           path: "./.github/scripts/requirements.txt"
 
-      - name: "Run Code Review script"
-        run: python ./.github/scripts/hello.py "$GITHUB_REPOSITORY" "$PR_NUMBER"
+      - name: "Get AI Code Review"
+        run: python ./.github/scripts/get_changed_files.py "$GITHUB_REPOSITORY" "$PR_NUMBER" "$GITHUB_SHA"
         env:
           GITHUB_API_KEY: ${{ secrets.GH_API_KEY }}
