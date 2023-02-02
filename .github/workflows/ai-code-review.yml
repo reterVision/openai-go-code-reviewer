@@ -21,5 +21,8 @@ jobs:
           python-version: '3.10'
       - run: python ./.github/scripts/hello.py
 
-      - name: "Get repo name and pr number"
+      - name: "Run Code Review script"
         run: echo "$GITHUB_REPOSITORY/pulls/$PR_NUMBER"
+        env:
+          PATH_TO_PR: "$GITHUB_REPOSITORY/pulls/$PR_NUMBER"
+          GITHUB_API_KEY: ${{ secrets.GH_API_KEY }}
