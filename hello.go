@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"openai-go-code-reviewer/sampleapi"
+)
 
 func main() {
-	fmt.Println("hello, world")
+	message := sampleapi.DumbAPI("test", 28)
+
+	fmt.Println(message)
 }
