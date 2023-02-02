@@ -9,20 +9,17 @@ jobs:
   build-go-code:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout Code"
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: "Setup Go"
-        uses: actions/setup-go@v3
-        with:
-          go-version: '>=1.17.0'
-        run: go run hello.go
+      - uses: actions/setup-go@v3
+      - with:
+        go-version: '>=1.17.0'
+      - run: go run hello.go
 
-      - name: "Setup Python"
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-        run: python ./.github/scripts/hello.py
+      - run: python ./.github/scripts/hello.py
 
       - name: "Get repo name and pr number"
         run: echo "$GITHUB_REPOSITORY/pulls/$PR_NUMBER"
