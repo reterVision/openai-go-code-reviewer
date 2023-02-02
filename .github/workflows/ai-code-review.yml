@@ -4,6 +4,7 @@ on: [pull_request]
 
 env:
   PR_NUMBER: ${{ github.event.number }}
+  REPO_NAME: $GITHUB_REPOSITORY
 
 jobs:
   build-go-code:
@@ -23,6 +24,6 @@ jobs:
       - name: "Run Code Review script"
         run: python ./.github/scripts/hello.py
         env:
-          GIT_REPO: ${{ GITHUB_REPOSITORY }}
+          GIT_REPO: ${{ REPO_NAME }}
           PR_NUMBER: ${{ PR_NUMBER }}
           GITHUB_API_KEY: ${{ secrets.GH_API_KEY }}
