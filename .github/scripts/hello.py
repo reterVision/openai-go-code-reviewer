@@ -5,9 +5,8 @@ import requests
 
 
 def get_changed_files_in_pr(repo_name, pr_number, github_api_key):
-    print("Loading files included in PR %s" % pr_number)
-
     endpoint = "https://api.github.com/repos/{repo_name}/pulls/{pr_number}/files"
+    print("Loading files included in PR {endpoint}")
 
     response = requests.post(
         endpoint,
