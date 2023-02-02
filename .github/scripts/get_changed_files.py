@@ -51,6 +51,7 @@ def review_contents(filename, content, repo_name, pr_number, github_api_key, com
       presence_penalty=0
     )
     comments = response.choices[0].text
+    print(f"AI Code Review Comments: {comments}")
 
     # posting comments to github PR
     request_body = {
@@ -69,6 +70,7 @@ def review_contents(filename, content, repo_name, pr_number, github_api_key, com
         },
         json=request_body
     )
+    print("Github comment response: %s" % response)
 
 
 
