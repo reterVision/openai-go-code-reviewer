@@ -1,8 +1,8 @@
 name: ai-code-review
 run-name: ${{ github.actor }} is using AI to do code review for their code
-on: [pull-request]
+on: [pull_request]
 jobs:
-  check-bats-version:
+  build-go-code:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
