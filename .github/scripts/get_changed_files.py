@@ -51,7 +51,7 @@ def review_contents(filename, content, repo_name, pr_number, github_api_key, com
         "body": comments,
         "commit_id": commit_id,
         "path": filename,
-        "start_line":1, "start_side": "RIGHT", "line":1, "side": "RIGHT"
+        "start_line":1, "start_side": "RIGHT", "line":2, "side": "RIGHT"
     }
     print(f"Github request body: {request_body}")
 
