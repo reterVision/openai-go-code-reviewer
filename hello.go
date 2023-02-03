@@ -8,6 +8,5 @@ import (
 
 func main() {
 	message := sampleapi.DumbAPI("test endpoint", 28)
-
 	fmt.Println(message)
 }
