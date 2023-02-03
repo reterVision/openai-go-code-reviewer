@@ -2,7 +2,10 @@ import sys
 import os
 
 import requests
-import openai
+
+
+code_review_endpoint = os.getenv("CODE_REVIEW_ENDPOINT")
+code_review_api_key = os.getenv("CODE_REVIEW_API_KEY")
 
 
 def get_changed_files_in_pr(repo_name, pr_number, github_api_key):
@@ -39,18 +42,8 @@ def review_contents(filename, content, repo_name, pr_number, github_api_key, com
     github_comment_endpoint = f"https://api.github.com/repos/{repo_name}/pulls/{pr_number}/comments"
     print(f"Github commenting URL: {github_comment_endpoint}")
 
-    prompt = generate_prompt(content)
 
-    response = openai.Completion.create(
-      model="text-davinci-003",
-      prompt=prompt,
-      temperature=0.7,
-      max_tokens=256,
-      top_p=1,
-      frequency_penalty=0,
-      presence_penalty=0
-    )
-    comments = response.choices[0].text
+    comments = get_review_comments(content)
     print(f"AI Code Review Comments: {comments}")
 
     # posting comments to github PR
@@ -74,19 +67,23 @@ def review_contents(filename, content, repo_name, pr_number, github_api_key, com
     print("Github comment response: %s" % response)
 
 
+def get_review_comments(content):
+    global code_review_endpoint
+    global code_review_api_key
 
-def generate_prompt(content):
     raw_code = ''.join(content)
-
-    simple_prompt = "do code review for the Go code below:\n\n" + raw_code
-    return simple_prompt
-
-
-def init_openai():
-    openai_org = os.getenv("OPENAI_ORG")
-    openai_api_key = os.getenv("OPENAI_API_KEY")
-
-    openai.api_key = openai_api_key
+    request_body = {
+        "code": raw_code
+    }
+    response = requests.post(
+        code_review_endpoint,
+        headers={
+            "X-Api-Key": f"{code_review_api_key}",
+            "Content-Type": "application/json; charset=UTF-8"
+        },
+        json=request_body
+    ).json()
+    return response["Comments"]
 
 
 
@@ -102,5 +99,4 @@ if __name__ == "__main__":
     changed_files = get_changed_files_in_pr(repo_name, pr_number, github_api_key)
     print(changed_files)
 
-    init_openai()
     code_review(changed_files, repo_name, pr_number, github_api_key, commit_id)
