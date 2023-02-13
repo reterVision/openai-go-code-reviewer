@@ -75,7 +75,7 @@ def code_review(content, repo_name, pr_number, github_api_key, commit_id):
                         break
 
             print((first_line, line_number+1))
-            # review_contents(filename, line_number, code_block, repo_name, pr_number, github_api_key, commit_id)
+            review_contents(filename, line_number, code_block, repo_name, pr_number, github_api_key, commit_id)
 
 
 def review_contents(filename, line_number, content, repo_name, pr_number, github_api_key, commit_id):
