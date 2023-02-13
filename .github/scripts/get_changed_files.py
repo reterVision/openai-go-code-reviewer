@@ -65,7 +65,12 @@ def code_review(content, repo_name, pr_number, github_api_key, commit_id):
             if len(code_block) == 0:
                 continue
 
-            first_line = code_block[0]
+            first_line = ''
+            for line in code_block:
+                if line != '\n':
+                    first_line = line
+                    break
+
             for line_number, line in enumerate(raw_file):
                 if line == first_line:
                     break
