@@ -25,4 +25,8 @@ func HelloWorld() {
 	for i := 0; i < 10; i++ {
 		fmt.Printf("Test Output\n")
 	}
+
+	for i := 0; i < 10; i++ {
+		fmt.Printf("Test Nihao\n")
+	}
 }

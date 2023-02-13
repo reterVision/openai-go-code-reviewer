@@ -65,18 +65,17 @@ def code_review(content, repo_name, pr_number, github_api_key, commit_id):
             if len(code_block) == 0:
                 continue
 
-            first_line = ''
-            for line in code_block:
-                if line != '\n':
-                    first_line = line
-                    break
+            first_line = code_block[0]
+            full_block = ''.join(code_block)
 
             for line_number, line in enumerate(raw_file):
                 if line == first_line:
-                    break
+                    orig_content = ''.join(raw_file[line_number:line_number+len(code_block)])
+                    if orig_content == full_block:
+                        break
 
             print((first_line, line_number+1))
-            review_contents(filename, line_number, code_block, repo_name, pr_number, github_api_key, commit_id)
+            # review_contents(filename, line_number, code_block, repo_name, pr_number, github_api_key, commit_id)
 
 
 def review_contents(filename, line_number, content, repo_name, pr_number, github_api_key, commit_id):
