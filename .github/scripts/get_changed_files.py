@@ -26,32 +26,71 @@ def get_changed_files_in_pr(repo_name, pr_number, github_api_key):
     filenames = []
     for r in res:
         filename = r["filename"]
-        if filename[-3:] == ".go":
-            filenames.append(filename)
+        additions = r["additions"]
+        if filename[-3:] != ".go" or additions <= 0:
+            continue
+
+        patch = r["patch"].split('\n')
+        print(patch)
+
+        code_blocks = []
+        single_block = []
+
+        # Separating modified blocks for independent reviews
+        for line in patch:
+            if len(line) > 0 and line[0] == "+":
+                single_block.append(line[1:] + '\n')
+                continue
+            if len(single_block) > 0:
+                code_blocks.append(single_block)
+                single_block = []
+
+        if len(single_block) > 0:
+            code_blocks.append(single_block)
+            single_block = []
+
+        filenames.append((filename, code_blocks))
+
     return filenames
 
 
-def code_review(filenames, repo_name, pr_number, github_api_key, commit_id):
-    for filename in filenames:
+def code_review(content, repo_name, pr_number, github_api_key, commit_id):
+    for content in content:
+        filename, code_blocks = content[0], content[1]
+
         with open(filename) as f:
-            content = f.readlines()
-        review_contents(filename, content, repo_name, pr_number, github_api_key, commit_id)
+            raw_file = f.readlines()
+
+        for code_block in code_blocks:
+            if len(code_block) == 0:
+                continue
+
+            first_line = code_block[0]
+            full_block = ''.join(code_block)
+
+            for line_number, line in enumerate(raw_file):
+                if line == first_line:
+                    orig_content = ''.join(raw_file[line_number:line_number+len(code_block)])
+                    if orig_content == full_block:
+                        break
+
+            print((first_line, line_number+1))
+            review_contents(filename, line_number, code_block, repo_name, pr_number, github_api_key, commit_id)
 
 
-def review_contents(filename, content, repo_name, pr_number, github_api_key, commit_id):
-    github_comment_endpoint = f"https://api.github.com/repos/{repo_name}/pulls/{pr_number}/comments"
-    print(f"Github commenting URL: {github_comment_endpoint}")
-
-
+def review_contents(filename, line_number, content, repo_name, pr_number, github_api_key, commit_id):
     comments = get_review_comments(content)
     print(f"AI Code Review Comments: {comments}")
+
+    github_comment_endpoint = f"https://api.github.com/repos/{repo_name}/pulls/{pr_number}/comments"
+    print(f"Github commenting URL: {github_comment_endpoint}")
 
     # posting comments to github PR
     request_body = {
         "body": comments,
         "commit_id": commit_id,
         "path": filename,
-        "start_line":1, "start_side": "RIGHT", "line":2, "side": "RIGHT"
+        "start_line":line_number, "start_side": "RIGHT", "line":line_number+1, "side": "RIGHT"
     }
     print(f"Github request body: {request_body}")
 
